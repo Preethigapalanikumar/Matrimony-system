@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Set Your Age Preference</title>
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff8fa3;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url('/static/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            max-width: 450px;
+            width: 90%;
+            margin: 1rem auto;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        h2, h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        #message {
+            font-weight: bold;
+            margin-top: 1rem;
+            color: green;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Set Your Age Preference</h2>
+    <form method="POST">
+        <label for="min_age">Minimum Age:</label>
+        <input type="number" name="min_age" required><br>
+      
+        <label for="max_age">Maximum Age:</label>
+        <input type="number" name="max_age" required><br>
+      
+        <button type="submit">Save Preference</button>
+      </form>
+      
+    <div class="note">
+        🎯 Match better by choosing your ideal age range!
+    </div>
+</div>
+
+</body>
+</html>

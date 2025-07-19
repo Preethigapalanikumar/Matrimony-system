@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Messages</title>
+    <style>
+        .message {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        #reply-form {
+            background: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        #reply-text {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="messages-container">
+        <h2>Your Messages</h2>
+        <div id="messages-list"></div>
+    </div>
+
+    <div id="reply-form" style="display:none;">
+        <h3>Reply to <span id="reply-to-name"></span></h3>
+        <div id="original-message" style="background:#f0f0f0; padding:10px; margin-bottom:10px;"></div>
+        <textarea id="reply-text" rows="4" style="width:100%;"></textarea>
+        <button onclick="sendReply()">Send Reply</button>
+        <input type="hidden" id="original-sender-id">
+    </div>
+
+    <script>
+    // Load messages when page loads
+    window.onload = function() {
+        fetchMessages();
+    };
+
+    function fetchMessages() {
+        fetch('/messages')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const container = document.getElementById('messages-list');
+                    container.innerHTML = '';
+                    
+                    data.messages.forEach(message => {
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = 'message';
+                        
+                        messageDiv.innerHTML = `
+                            <strong>From: ${message.sender_name}</strong>
+                            <p>${message.message_text}</p>
+                            <button onclick="showReplyForm('${message.sender_id}', '${message.sender_name}', '${message.message_text.replace(/'/g, "\\'")}')">
+                                Reply
+                            </button>
+                            ${message.is_read ? '' : '<span style="color:red;">(New)</span>'}
+                        `;
+                        
+                        container.appendChild(messageDiv);
+                        
+                        // Mark as read if unread
+                        if (!message.is_read) {
+                            fetch(`/mark_read/${message.message_id}`, { method: 'POST' });
+                        }
+                    });
+                }
+            });
+    }
+
+    function showReplyForm(senderId, senderName, originalText) {
+        document.getElementById('original-sender-id').value = senderId;
+        document.getElementById('original-message').textContent = originalText;
+        document.getElementById('reply-to-name').textContent = senderName;
+        document.getElementById('reply-form').style.display = 'block';
+        document.getElementById('reply-text').focus();
+    }
+
+    function sendReply() {
+        const senderId = document.getElementById('original-sender-id').value;
+        const replyText = document.getElementById('reply-text').value;
+        
+        fetch('/reply_message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                original_sender_id: senderId,
+                reply_text: replyText
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Reply sent successfully!');
+                document.getElementById('reply-form').style.display = 'none';
+                document.getElementById('reply-text').value = '';
+                fetchMessages(); // Refresh the messages
+            } else {
+                alert('Error: ' + data.error);
+            }
+        });
+    }
+    </script>
+</body>
+</html>

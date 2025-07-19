@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Your Details</title>
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff8fa3;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url('/static/bg2.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 5vh 1rem;
+            flex-direction: column;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 90%;
+            margin: 2rem auto;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        #message {
+            font-weight: bold;
+            margin-top: 1rem;
+            color: green;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Confirm Your Details</h2>
+        <!-- <div id="extractedText">
+            <h4>Extracted Data:</h4>
+            <p id="textContent">{{ extracted_text }}</p>
+        </div> -->
+        <form id="userForm">
+            <input type="text" id="name" name="name" placeholder="Enter Your Name" required>
+            <input type="text" id="dob" name="dob" placeholder="Enter Date of Birth (DD/MM/YYYY)" required>
+            <input type="text" id="idNumber" name="idNumber" placeholder="Enter ID Number" required>
+            <button type="submit">Submit</button>
+        </form>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        document.getElementById("userForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const dob = document.getElementById("dob").value;
+            const idNumber = document.getElementById("idNumber").value;
+
+            fetch("/compare", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, dob, idNumber })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("message").textContent = data.message || data.error;
+                if (data.success) {
+                    alert("Details verified successfully!");
+                    window.location.href = "/selfie";  // 🔹 Redirect to Selfie Page
+                } else {
+                    alert("Mismatch found! Please check your details.");
+                }
+            })
+            .catch(error => {
+                document.getElementById("message").textContent = "Error verifying details.";
+                console.error("Verification error:", error);
+            });
+        });
+    </script>
+</body>
+</html>

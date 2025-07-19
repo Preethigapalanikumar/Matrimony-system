@@ -1,0 +1,102 @@
+<!-- templates/linkedin_success.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="refresh" content="2; url={{ url_for('set_age_preference') }}">
+    <title>Upload Successful</title>
+    <style>
+:root {
+            --primary: #ff4d6d;
+            --secondary: #ff8fa3;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url('/static/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .success-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            max-width: 450px;
+            width: 90%;
+            animation: bounce 1s ease;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        a:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="success-container">
+    <h1>Profile Uploaded Successfully!</h1>
+    <p>Your LinkedIn profile URL has been saved.</p>
+    <a href="/upload_linkedin_form">SUCCESS....!</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+    <style>
+        /* Add styles for the form and image preview */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Edit Profile</h2>
+        <form id="editProfileForm" method="POST" enctype="multipart/form-data">
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name" value="{{ user[0] }}" required><br>
+
+            <label for="age">Age:</label>
+            <input type="number" name="age" id="age" value="{{ user[1] }}" required><br>
+
+            <label for="gender">Gender:</label>
+            <select name="gender" id="gender" required>
+                <option value="Male" {% if user[2] == "Male" %} selected {% endif %}>Male</option>
+                <option value="Female" {% if user[2] == "Female" %} selected {% endif %}>Female</option>
+                <option value="Other" {% if user[2] == "Other" %} selected {% endif %}>Other</option>
+            </select><br><br>
+
+            <label for="profile_picture">Profile Picture:</label>
+            <input type="file" name="profile_picture" id="profile_picture"><br>
+            
+            <img id="previewImg" class="preview" src="{{ user[3] }}" alt="Profile Picture" width="150"><br>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('profile_picture');
+        const preview = document.getElementById('previewImg');
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+            }
+        });
+
+        // Add any additional JavaScript or form handling logic if needed
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Compatible Users</title></head>
+<body>
+    <h2>Users in Your Preferred Age Range</h2>
+    {% if users %}
+        <ul>
+        {% for u in users %}
+            <li>{{ u[1] }} (Age: {{ u[2] }})</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No compatible users found.</p>
+    {% endif %}
+</body>
+</html>

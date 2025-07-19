@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><title>Chat with {{ contact_name }}</title></head>
+<body>
+  <h2>Chat with {{ contact_name }}</h2>
+  <div style="height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;">
+    {% for msg in messages %}
+      <p><strong>{{ msg.name }}:</strong> {{ msg.message_text }}</p>
+    {% endfor %}
+  </div>
+  <form method="post">
+    <input type="text" name="message" placeholder="Type your message" required>
+    <button type="submit">Send</button>
+  </form>
+  <a href="/inbox">Back to Inbox</a>
+</body>
+</html>

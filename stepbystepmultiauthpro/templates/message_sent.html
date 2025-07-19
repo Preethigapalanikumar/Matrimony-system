@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Message Sent</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #e0ffe0;
+            text-align: center;
+            padding-top: 100px;
+        }
+        .popup {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+    </style>
+    <script>
+        setTimeout(function() {
+            window.location.href = "/message_form";
+        }, 2000); // Redirect after 2 seconds
+    </script>
+</head>
+<body>
+    <div class="popup">
+        <h2>✅ Message Sent Successfully!</h2>
+        <p>You will be redirected shortly...</p>
+    </div>
+</body>
+</html>

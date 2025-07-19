@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selfie Capture</title>
+    <style>
+ :root {
+            --primary: #ff4d6d;
+            --secondary: #ff8fa3;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url('/static/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 5vh 1rem;
+            flex-direction: column;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 90%;
+            margin: 2rem auto;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        video, canvas {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1.2rem;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Capture Your Selfie</h2>
+        <video id="video" autoplay></video>
+        <canvas id="canvas" style="display: none;"></canvas>
+        <button id="capture">Capture</button>
+        <button id="upload" style="display: none;">Upload</button>
+    </div>
+
+    <script>
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const captureButton = document.getElementById("capture");
+        const uploadButton = document.getElementById("upload");
+
+        // Access webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => { video.srcObject = stream; })
+            .catch(err => { console.error("Camera access error:", err); });
+
+        // Capture image
+        captureButton.addEventListener("click", () => {
+            const context = canvas.getContext("2d");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            captureButton.style.display = "none";
+            uploadButton.style.display = "block";
+        });
+
+        // Upload selfie
+        uploadButton.addEventListener("click", () => {
+            canvas.toBlob(blob => {
+                const formData = new FormData();
+                formData.append("selfie", blob, "selfie.jpg");
+
+                fetch("/upload_selfie", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.success) {
+                        window.location.href = "/verify_selfie"; // Redirect to verification page
+                    }
+                })
+                .catch(error => {
+                    console.error("Upload error:", error);
+                });
+            }, "image/jpeg");
+        });
+    </script>
+</body>
+</html>

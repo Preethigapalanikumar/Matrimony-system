@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Profile Picture</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 100px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 2rem;
+            border-radius: 15px;
+            background-color: #f9f9f9;
+        }
+        input[type="file"] {
+            margin-bottom: 1rem;
+        }
+        .preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Upload Profile Picture</h2>
+        <img id="previewImg" class="preview" alt="Preview">
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" name="profile_picture" id="fileInput" accept="image/*" required><br>
+            <button type="submit">Upload</button>
+        </form>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        const preview = document.getElementById("previewImg");
+        const fileInput = document.getElementById("fileInput");
+
+        fileInput.addEventListener("change", () => {
+            const file = fileInput.files[0];
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = "block";
+            }
+        });
+
+        document.getElementById("uploadForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch("/upload_profile_picture", {
+                method: "POST",
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById("message").textContent = result.success ? "Uploaded successfully!" : result.error;
+            if (result.success) {
+                setTimeout(() => {
+                    window.location.href = "/dashboard";
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+</html>

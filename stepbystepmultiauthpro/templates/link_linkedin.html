@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Profile Linking</title>
+    <style>
+         
+           :root {
+            --primary: #ff4d6d;
+            --secondary: #ff8fa3;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url('/static/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 5vh 1rem;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            max-width: 450px;
+            width: 90%;
+            margin: 1rem auto;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        h2, h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="url"] {
+            width: 100%;
+            padding: 0.8rem;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            border: 2px dashed var(--secondary);
+            background: #fff0f5;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="url"]:hover {
+            border-color: var(--primary);
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        #message, #validateMessage {
+            font-weight: bold;
+            margin-top: 1rem;
+            color: green;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            <span class="material-icons">link</span> 
+        </div>
+        <h2>Link Your LinkedIn Profile</h2>
+
+        <form action="/submit_linkedin" method="POST">
+            <div class="form-group">
+                <label for="linkedin_url">Enter LinkedIn Profile URL:</label>
+                <input type="url" id="linkedin_url" name="linkedin_url" required placeholder="https://www.linkedin.com/in/yourprofile">
+            </div>
+            <button type="submit">Link Profile</button>
+        </form>
+
+        <p id="message"></p>
+
+        <div class="footer">
+            <p>By proceeding, you agree to our <a href="/terms">Terms & Conditions</a></p>
+        </div>
+    </div>
+
+
+    <script src="scripts.js"></script>
+</body>
+</html>

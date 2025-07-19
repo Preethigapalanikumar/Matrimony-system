@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Featured Profiles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f7f7f7;
+        }
+        #featuredProfiles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .profile-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            width: 200px;
+            padding: 10px;
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            border: 2px solid #ccc;
+        }
+        .profile-info h3 {
+            margin: 0 0 5px;
+        }
+        .profile-info p {
+            margin: 3px 0;
+            color: #555;
+            font-size: 0.9em;
+        }
+        .view-btn {
+            margin-top: 10px;
+            background: #007bff;
+            border: none;
+            padding: 8px 12px;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .view-btn:hover {
+            background: #0056b3;
+        }
+
+        #profileDetails {
+            margin-top: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            max-width: 400px;
+            display: none;
+        }
+        #profileDetails img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #007bff;
+            margin-bottom: 15px;
+        }
+        #profileDetails h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        #profileDetails p {
+            margin: 5px 0;
+            font-size: 1em;
+        }
+        #closeProfile {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        #closeProfile:hover {
+            background: #a71d2a;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Featured Profiles</h1>
+    <div id="featuredProfiles">
+        <!-- Profile cards will be injected here -->
+    </div>
+
+    <div id="profileDetails">
+        <button id="closeProfile">Close</button>
+        <img id="detailImage" src="/static/images/default_profile.jpg" alt="Profile Image" />
+        <h2 id="detailName"></h2>
+        <p><strong>Age:</strong> <span id="detailAge"></span></p>
+        <p><strong>Gender:</strong> <span id="detailGender"></span></p>
+        <p><strong>Location:</strong> <span id="detailLocation"></span></p>
+        <p><strong>Religion:</strong> <span id="detailReligion"></span></p>
+    </div>
+
+<script>
+    fetch("/featured_profiles")
+        .then(response => response.json())
+        .then(featuredProfiles => {
+            const container = document.getElementById("featuredProfiles");
+            container.innerHTML = featuredProfiles.map(profile => `
+                <div class="profile-card">
+                    <img src="${profile.img}" alt="${profile.name}" class="profile-img">
+                    <div class="profile-info">
+                        <h3>${profile.name}</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> ${profile.location}</p>
+                        <p>Age: ${profile.age}</p>
+                        <button class="view-btn" data-id="${profile.id}">View Profile</button>
+                    </div>
+                </div>
+            `).join("");
+
+            // Add click listeners to "View Profile" buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const userId = btn.getAttribute('data-id');
+                    fetch(`/profile/${userId}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                const profile = data.profile;
+                                document.getElementById('detailName').textContent = profile.name;
+                                document.getElementById('detailAge').textContent = profile.age;
+                                document.getElementById('detailGender').textContent = profile.gender;
+                                document.getElementById('detailLocation').textContent = profile.location;
+                                document.getElementById('detailReligion').textContent = profile.religion || 'Not specified';
+                                document.getElementById('detailImage').src = profile.img;
+                                document.getElementById('detailImage').alt = profile.name;
+
+                                // Show the profile details container
+                                document.getElementById('profileDetails').style.display = 'block';
+                                // Scroll to profile details
+                                document.getElementById('profileDetails').scrollIntoView({behavior: 'smooth'});
+                            } else {
+                                alert("Profile not found.");
+                            }
+                        })
+                        .catch(err => {
+                            alert("Error fetching profile.");
+                            console.error(err);
+                        });
+                });
+            });
+        })
+        .catch(err => {
+            console.error("Failed to load featured profiles:", err);
+        });
+
+    // Close button hides the profile details
+    document.getElementById('closeProfile').addEventListener('click', () => {
+        document.getElementById('profileDetails').style.display = 'none';
+    });
+</script>
+
+</body>
+</html>

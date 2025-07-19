@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Browse Profiles</title>
+    <style>
+        .profile-card { border: 1px solid #ddd; padding: 1rem; margin: 1rem; }
+    </style>
+</head>
+<body>
+    <h1>Browse Profiles</h1>
+    <div id="profiles">
+        {% for profile in profiles %}
+            <div class="profile-card">
+                <h3>{{ profile.name }}, {{ profile.age }}</h3>
+                <p>Gender: {{ profile.gender }}</p>
+                <a href="/profile/{{ profile.id }}">View Profile</a>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

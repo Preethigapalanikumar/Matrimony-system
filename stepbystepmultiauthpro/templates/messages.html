@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Messages</title>
+</head>
+<body>
+    <h2>Your Messages</h2>
+    {% for msg in messages %}
+        <div style="margin-bottom:10px; border:1px solid #ccc; padding:10px;">
+            <strong>From:</strong> {{ msg.sender }}<br>
+            <strong>Message:</strong> {{ msg.text }}<br>
+            {% if msg.is_read == 0 %}<em>New</em>{% else %}Read{% endif %}
+        </div>
+    {% endfor %}
+</body>
+</html>
+
